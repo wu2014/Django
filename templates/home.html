@@ -1,0 +1,60 @@
+{% extends "base.html" %}
+{% load crispy_forms_tags %}
+{% load staticfiles %}
+
+
+{% block head_title %}Welcome | {{ block.super }}{% endblock %}
+
+     
+{% block jumbotron %}
+ {% if not request.user.is_authenticated %}
+
+    <div class="jumbotron">
+        
+        <h1>Django example</h1>
+        <p>This application is created with Djang1.8, python 2.7, Bootstrap3. I also used several Django third party libraries, such as: django-crispy-forms, Django Registration [Redux].</p>
+        <p>To see the difference between Djang1.8 and Djang1.9.</p>
+        <p>
+          <a class="btn btn-lg btn-primary" href="#" role="button">Join us &raquo;</a>
+        </p>
+     
+    </div>  
+ {% endif %}
+{% endblock %}
+
+
+{% block content %}
+ {% if request.user.is_authenticated %}
+<h1>You are logged in!</h1>
+
+	{% if queryset %}
+	<h2>Welcome Staff</h2>
+	<table class='table'>
+	{% for instance in queryset %}
+		<tr><td>{{ forloop.counter }}</td><td>{{ instance.email }}</td><td>{{ instance.full_name }}</td><td>{{ instance.timestamp|timesince }} ago</td></tr>
+		{% if instance.email == "abc@gmail.edu" %}
+		<tr><td>is equal</td></tr>
+		{% endif %}
+	{% endfor %}
+	</table>
+
+	{% endif %}
+
+ {% else %}
+<div class="row">
+
+  <div class="col-md-4 col-md-offset-4">
+		<p class='lead text-align-center'>{{ title }}</p>
+
+		<form method='POST' action=''>{% csrf_token %}
+		{{ form|crispy }}
+
+		    <input class='btn btn-primary' type='submit' value='Sign Up' />
+
+		</form>
+	</div>
+</div>
+
+{% endif %}
+
+{% endblock %}
